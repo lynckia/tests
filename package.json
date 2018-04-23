@@ -1,0 +1,28 @@
+{
+  "name": "licode-tests",
+  "version": "1.0.0",
+  "description": "Integration Tests for Licode service",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/webdriverio/bin/wdio"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lynckia/tests.git"
+  },
+  "keywords": [
+    "licode",
+    "tests"
+  ],
+  "author": "Lynckia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lynckia/tests/issues"
+  },
+  "homepage": "https://github.com/lynckia/tests#readme",
+  "devDependencies": {
+    "wdio-mocha-framework": "^0.5.13",
+    "wdio-selenium-standalone-service": "0.0.10",
+    "webdriverio": "^4.12.0"
+  }
+}

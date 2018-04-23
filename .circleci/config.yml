@@ -3,19 +3,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: buildpack-deps:trusty-curl
-      - image: selenium/hub
-        name: hub
-      - image: selenium/node-chrome
-        environment:
-          HUB_PORT_4444_TCP_ADDR: hub
-          HUB_PORT_4444_TCP_PORT: 4444
-          SE_OPTS: "-port 4446"
-      - image: selenium/node-firefox
-        environment:
-          HUB_PORT_4444_TCP_ADDR: hub
-          HUB_PORT_4444_TCP_PORT: 4444
-          SE_OPTS: "-port 4445"
+      - image: circleci/node:4.9
 
     steps:
       - checkout
@@ -31,6 +19,17 @@ jobs:
             tar -xz -C /tmp -f /tmp/docker-$VER.tgz
             mv /tmp/docker/* /usr/bin
 
+
+      - run:
+          name: Install Dependencies
+          command: |
+            npm install --only=dev
+
+      - run:
+          name: Selenium
+          command: |
+            docker-compose up -d
+
       - run:
           name: Pull latest docker image
           command: |
@@ -41,5 +40,11 @@ jobs:
           command: |
             MIN_PORT=30000; MAX_PORT=30050; docker run --name licode -p  3000:3000 -p $MIN_PORT-$MAX_PORT:$MIN_PORT-$MAX_PORT/udp -p 3001:3001  -p 8080:8080 -e "MIN_PORT=$MIN_PORT" -e "MAX_PORT=$MAX_PORT" -e "PUBLIC_IP=127.0.0.1" lynckia/licode:develop
           background: true
+
+      - run:
+          name: Tests
+          command: |
+            npm test
+
 
       - run: echo ok!
