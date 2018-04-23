@@ -1,4 +1,4 @@
-selenium-hub:
+hub:
   image: selenium/hub
   ports:
   - 4444:4444
@@ -6,7 +6,8 @@ selenium-hub:
 chrome:
   image: selenium/node-chrome
   links:
-  - selenium-hub:hub
+  - hub:hub
+  - integration:integration
   volumes:
   - /dev/shm:/dev/shm # Mitigates the Chromium issue described at https://code.google.com/p/chromium/issues/detail?id=519952
 
@@ -15,4 +16,21 @@ firefox:
   environment:
     HUB_PORT_4444_TCP_ADDR: hub
   links:
-  - selenium-hub:hub
+  - hub:hub
+  - integration:integration
+
+licode:
+  image: lynckia/licode:develop
+  environment:
+    MIN_PORT: 30000
+    MAX_PORT: 30150
+
+integration:
+  build: .
+  container_name: integration
+  environment:
+    HUB_PORT_4444_TCP_ADDR: hub
+    LICODE_ADDR: licode
+  links:
+  - hub:hub
+  - licode:licode

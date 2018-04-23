@@ -41,12 +41,31 @@ exports.config = {
     capabilities: {
         chrome: {
             desiredCapabilities: {
-                browserName: 'chrome'
+                browserName: 'chrome',
+                chromeOptions: {
+                  "args": [
+                    "no-proxy-server",
+                    "no-default-browser-check",
+                    "no-first-run",
+                    "disable-boot-animation",
+                    "disable-default-apps",
+                    "disable-extensions",
+                    "disable-translate",
+                    "--use-fake-ui-for-media-stream",
+                    "--use-fake-device-for-media-stream",
+                    '--unsafely-treat-insecure-origin-as-secure="' + process.env.LICODE_ADDR + '"',
+                  ],
+                },
             }
         },
         firefox: {
             desiredCapabilities: {
-                browserName: 'firefox'
+                browserName: 'firefox',
+                'moz:firefoxOptions': {
+                  "prefs": {
+                    "media.navigator.streams.fake": "true",
+                  },
+                }
             }
         }
     },
@@ -77,6 +96,8 @@ exports.config = {
     //
     // Saves a screenshot to a given path if a command fails.
     screenshotPath: './errorShots/',
+    host: process.env.HUB_PORT_4444_TCP_ADDR || 'localhost',
+
     //
     // Set a base URL in order to shorten url command calls. If your `url` parameter starts
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.

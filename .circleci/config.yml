@@ -20,19 +20,19 @@ jobs:
       #       mv /tmp/docker/* /usr/bin
 
       - run:
-          name: Install Dependencies
+          name: Create docker instances
           command: |
-            npm install --only=dev
+            docker-compose build
 
       - run:
-          name: Selenium
+          name: Start selenium
           command: |
-            docker-compose up -d
+            docker-compose up -d hub chrome firefox
 
       - run:
-          name: Pull latest docker image
+          name: Start licode
           command: |
-            docker pull lynckia/licode:develop
+            docker-compose up -d licode
 
       - run:
           name: Run Licode
@@ -43,7 +43,4 @@ jobs:
       - run:
           name: Tests
           command: |
-            npm test
-
-
-      - run: echo ok!
+            docker-compose up integration

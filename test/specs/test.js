@@ -1,10 +1,7 @@
 describe('something', function() {
   it('should do something with two browser', function () {
-    chrome.url('https://www.google.com/flights');
-    console.log(chrome.getTitle());
-
-    firefox.url('https://www.google.com');
-
+    chrome.url('http://licode:3001');
+    // firefox.url('http://licode:3001');
     console.log(browser.getTitle());
   });
 });
