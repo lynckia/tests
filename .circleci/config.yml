@@ -10,12 +10,12 @@ jobs:
         environment:
           HUB_PORT_4444_TCP_ADDR: hub
           HUB_PORT_4444_TCP_PORT: 4444
-          HUB_ENV_no_proxy: localhost
-          no_proxy: localhost
+          SE_OPTS: "-port 4446"
       - image: selenium/node-firefox
         environment:
           HUB_PORT_4444_TCP_ADDR: hub
           HUB_PORT_4444_TCP_PORT: 4444
+          SE_OPTS: "-port 4445"
 
     steps:
       - checkout
