@@ -9,9 +9,9 @@ jobs:
       - run:
           name: Prepare folders
           command: |
-            mkdir errorShots
-            mkdir reports
-            chmod a+x errorShots reports
+            mkdir -p errorShots
+            mkdir -p reports/junit
+            chmod a+x errorShots reports/junit
 
       - run:
           name: Create docker instances
