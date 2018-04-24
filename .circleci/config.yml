@@ -2,8 +2,7 @@ version: 2.0
 
 jobs:
   build:
-    machine:
-      - image: circleci/node:4.9
+    machine: true
 
     steps:
       - checkout
