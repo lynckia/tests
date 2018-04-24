@@ -157,7 +157,7 @@ exports.config = {
     reporters: ['junit'],
     reporterOptions: {
         junit: {
-            outputDir: './reports',
+            outputDir: './reports/junit',
             outputFileFormat: function(opts) { // optional
                 return `results-${opts.cid}.${opts.capabilities}.xml`
             }
