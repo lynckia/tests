@@ -11,6 +11,7 @@ jobs:
           command: |
             mkdir errorShots
             mkdir reports
+            chmod a+x errorShots reports
 
       - run:
           name: Create docker instances
@@ -39,7 +40,7 @@ jobs:
             docker-compose up integration
 
       - store_test_results:
-          path: /reports
+          path: ./reports
 
       - store_artifacts:
-          path: /errorShots
+          path: ./errorShots
