@@ -12,6 +12,8 @@ const getSubscribedStreams = function() {
 };
 
 describe('Firefox and Chrome', function() {
+  this.retries(4);
+
   beforeEach(function() {
     chrome.url('http://licode:3001');
     firefox.url('http://licode:3001');
