@@ -37,7 +37,7 @@ jobs:
       - run:
           name: Tests
           command: |
-            docker-compose up integration
+            docker-compose up --exit-code-from integration integration
 
       - store_test_results:
           path: ./reports
