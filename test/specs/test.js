@@ -26,6 +26,7 @@ describe('Firefox and Chrome', function() {
     browser.waitUntil(function() {
       const chromeRemoteStreams = chrome.execute(getSubscribedStreams);
       const firefoxRemoteStreams = firefox.execute(getSubscribedStreams);
+      console.log("results: ", chromeRemoteStreams, firefoxRemoteStreams);
       return chromeRemoteStreams.value > 0 && firefoxRemoteStreams.value > 0;
     });
   });
