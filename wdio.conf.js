@@ -42,33 +42,38 @@ exports.config = {
         chrome: {
             desiredCapabilities: {
                 browserName: 'chrome',
-                chromeOptions: {
-                  "args": [
-                    "no-proxy-server",
-                    "no-default-browser-check",
-                    "no-first-run",
-                    "disable-boot-animation",
-                    "disable-default-apps",
-                    "disable-extensions",
-                    "disable-translate",
-                    "--use-fake-ui-for-media-stream",
-                    "--use-fake-device-for-media-stream",
-                    '--unsafely-treat-insecure-origin-as-secure="' + process.env.LICODE_ADDR + '"',
-                  ],
+                'goog:chromeOptions': {
+                    args: [
+                        '--use-fake-device-for-media-stream',
+                        '--use-fake-ui-for-media-stream',
+                        '--unsafely-treat-insecure-origin-as-secure=http://licode:3001'
+                    ]
                 },
+                'chromeOptions': {
+                    args: [
+                        '--use-fake-device-for-media-stream',
+                        '--use-fake-ui-for-media-stream',
+                        'unsafely-treat-insecure-origin-as-secure="http://licode:3001"'
+                    ]
+                }
             }
         },
         firefox: {
             desiredCapabilities: {
                 browserName: 'firefox',
                 'moz:firefoxOptions': {
-                  "prefs": {
-                    "media.navigator.streams.fake": "true",
+                  'prefs': {
+                    'media.navigator.streams.fake': true,
                   },
-                }
+                },
             }
         }
     },
+
+    firefoxProfile: {
+      extensions: [],
+      'media.navigator.streams.fake': true,
+  },
 
     //
     // ===================
@@ -96,7 +101,7 @@ exports.config = {
     //
     // Saves a screenshot to a given path if a command fails.
     screenshotPath: './errorShots/',
-    host: process.env.HUB_PORT_4444_TCP_ADDR || 'localhost',
+    host: process.env.HUB_HOST || 'localhost',
 
     //
     // Set a base URL in order to shorten url command calls. If your `url` parameter starts
@@ -137,7 +142,7 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    // services: [],//
+    services: ['firefox-profile'],//
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: http://webdriver.io/guide/testrunner/frameworks.html
@@ -149,12 +154,21 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/reporters/dot.html
-    // reporters: ['dot'],
+    reporters: ['junit'],
+    reporterOptions: {
+        junit: {
+            outputDir: './reports',
+            outputFileFormat: function(opts) { // optional
+                return `results-${opts.cid}.${opts.capabilities}.xml`
+            }
+        }
+    },
     //
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
     mochaOpts: {
-        ui: 'bdd'
+        ui: 'bdd',
+        timeout: 60000
     },
     //
     // =====
@@ -186,8 +200,11 @@ exports.config = {
      * @param {Array.<Object>} capabilities list of capabilities details
      * @param {Array.<String>} specs List of spec file paths that are to be run
      */
-    // before: function (capabilities, specs) {
-    // },
+    before: function (capabilities, specs) {
+      var chai = require('chai');
+      global.expect = chai.expect;
+      chai.Should();
+    },
     /**
      * Runs before a WebdriverIO command gets executed.
      * @param {String} commandName hook command name
@@ -224,8 +241,14 @@ exports.config = {
      * Function to be executed after a test (in Mocha/Jasmine) or a step (in Cucumber) ends.
      * @param {Object} test test details
      */
-    // afterTest: function (test) {
-    // },
+    afterTest: function (test) {
+      if (!test.passed) {
+        var featureName = test.fullTitle;
+        var fileName = featureName + '.png';
+        chrome.saveScreenshot(chrome.options.screenshotPath + '/chrome_' + fileName);
+        firefox.saveScreenshot(firefox.options.screenshotPath + '/firefox_' + fileName)
+      }
+    },
     /**
      * Hook that gets executed after the suite has ended
      * @param {Object} suite suite details

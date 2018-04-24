@@ -1,36 +1,57 @@
-hub:
-  image: selenium/hub
-  ports:
-  - 4444:4444
+version: "3"
+services:
+  selenium-hub:
+    image: selenium/hub:3.11.0-dysprosium
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"  # Only used if we run wdio locally and not via docker
 
-chrome:
-  image: selenium/node-chrome
-  links:
-  - hub:hub
-  - integration:integration
-  volumes:
-  - /dev/shm:/dev/shm # Mitigates the Chromium issue described at https://code.google.com/p/chromium/issues/detail?id=519952
+  chrome:
+    image: selenium/node-chrome-debug:3.11.0-dysprosium
+    container_name: chrome
+    depends_on:
+      - selenium-hub
+    ports:
+      - "5902:5900"  # VNC for debugging things
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
 
-firefox:
-  image: selenium/node-firefox
-  environment:
-    HUB_PORT_4444_TCP_ADDR: hub
-  links:
-  - hub:hub
-  - integration:integration
+  firefox:
+    build:
+      context: .
+      dockerfile: Dockerfile-firefox-with-pulseaudio
+    container_name: firefox
+    depends_on:
+      - selenium-hub
+    ports:
+      - "5901:5900"  # VNC for debugging things
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
 
-licode:
-  image: lynckia/licode:develop
-  environment:
-    MIN_PORT: 30000
-    MAX_PORT: 30150
+  licode:
+    image: lynckia/licode:develop
+    container_name: licode
+    environment:
+      MIN_PORT: 30000
+      MAX_PORT: 35000
+    volumes:
+    - ./licode_default.js:/opt/licode/scripts/licode_default.js
 
-integration:
-  build: .
-  container_name: integration
-  environment:
-    HUB_PORT_4444_TCP_ADDR: hub
-    LICODE_ADDR: licode
-  links:
-  - hub:hub
-  - licode:licode
+  integration:
+    build:
+      context: .
+      dockerfile: Dockerfile-tests
+    container_name: integration
+    environment:
+      HUB_HOST: selenium-hub
+      LICODE_HOST: licode
+    depends_on:
+    - selenium-hub
+    - chrome
+    - firefox
+    - licode
+    volumes:
+    - ./errorShots:/tmp/errorShots
+    - ./reports:/tmp/reports

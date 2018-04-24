@@ -1,0 +1,9 @@
+FROM selenium/node-firefox-debug:3.11.0-dysprosium
+
+USER root
+RUN apt-get update && apt-get install -y pulseaudio
+
+USER seluser
+ADD docker-firefox-entrypoint.sh /opt/bin/
+
+CMD ["/opt/bin/docker-firefox-entrypoint.sh"]
