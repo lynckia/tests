@@ -11,7 +11,7 @@ jobs:
           command: |
             mkdir -p errorShots
             mkdir -p reports/junit
-            chmod a+x errorShots reports/junit
+            chmod a+w errorShots reports reports/junit
 
       - run:
           name: Create docker instances
