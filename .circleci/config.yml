@@ -2,7 +2,7 @@ version: 2.0
 
 jobs:
   build:
-    docker:
+    machine:
       - image: circleci/node:4.9
 
     steps:
