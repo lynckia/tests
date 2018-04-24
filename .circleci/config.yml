@@ -44,3 +44,9 @@ jobs:
 
       - store_artifacts:
           path: ./errorShots
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build
