@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Start selenium
           command: |
-            docker-compose up -d hub chrome firefox
+            docker-compose up -d seminar-hub chrome firefox
 
       - run:
           name: Start licode
