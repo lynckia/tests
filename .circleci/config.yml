@@ -8,8 +8,6 @@ jobs:
     steps:
       - checkout
 
-      - setup_remote_docker
-
       - run:
           name: Create docker instances
           command: |
