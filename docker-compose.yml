@@ -3,6 +3,8 @@ services:
   selenium-hub:
     image: selenium/hub:3.11.0-dysprosium
     container_name: selenium-hub
+    logging:
+      driver: "none"
     ports:
       - "4444:4444"  # Only used if we run wdio locally and not via docker
 
@@ -12,6 +14,8 @@ services:
       - selenium-hub
     # ports:
       # - "5902:5900"  # VNC for debugging things
+    logging:
+      driver: "none"
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
@@ -24,6 +28,8 @@ services:
       - selenium-hub
     # ports:
       # - "5901:5900"  # VNC for debugging things
+    logging:
+      driver: "none"
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
@@ -34,6 +40,8 @@ services:
     environment:
       MIN_PORT: 30000
       MAX_PORT: 35000
+    logging:
+      driver: "none"
     volumes:
     - ./licode_default.js:/opt/licode/scripts/licode_default.js
 
