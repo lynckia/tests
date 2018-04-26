@@ -151,17 +151,17 @@ new TwoBrowserTest().setBrowsers(['chrome', 'firefox'])
                     .setSimulcast([false])
                     .create();
 
-new TwoBrowserTest().setBrowsers(['chrome'/*, 'firefox'*/])
-                    .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
-                    .setTypes(['p2p'])
-                    .setSimulcast([false])
-                    .create();
-
-new TwoBrowserTest().setBrowsers(['firefox'])
-                    .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
-                    .setTypes(['p2p'])
-                    .setSimulcast([false])
-                    .create();
+// new TwoBrowserTest().setBrowsers(['chrome'/*, 'firefox'*/])
+//                     .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
+//                     .setTypes(['p2p'])
+//                     .setSimulcast([false])
+//                     .create();
+//
+// new TwoBrowserTest().setBrowsers(['firefox'])
+//                     .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
+//                     .setTypes(['p2p'])
+//                     .setSimulcast([false])
+//                     .create();
 
 new TwoBrowserTest().setBrowsers(['chrome'/*, 'firefox'*/])
                     .setMedias(['VP8_AND_OPUS'])
