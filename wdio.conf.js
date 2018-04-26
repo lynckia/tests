@@ -1,3 +1,35 @@
+const chromeCapabilities = {
+    desiredCapabilities: {
+        browserName: 'chrome',
+        'goog:chromeOptions': {
+            args: [
+                '--use-fake-device-for-media-stream',
+                '--use-fake-ui-for-media-stream',
+                '--unsafely-treat-insecure-origin-as-secure=http://licode:3001'
+            ]
+        },
+        'chromeOptions': {
+            args: [
+                '--use-fake-device-for-media-stream',
+                '--use-fake-ui-for-media-stream',
+                'unsafely-treat-insecure-origin-as-secure="http://licode:3001"'
+            ]
+        }
+    }
+};
+
+const firefoxCapabilities = {
+    desiredCapabilities: {
+        browserName: 'firefox',
+        'moz:firefoxOptions': {
+          'prefs': {
+            'media.navigator.streams.fake': true,
+          },
+        },
+    }
+};
+
+
 exports.config = {
 
     //
@@ -39,35 +71,10 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: {
-        chrome: {
-            desiredCapabilities: {
-                browserName: 'chrome',
-                'goog:chromeOptions': {
-                    args: [
-                        '--use-fake-device-for-media-stream',
-                        '--use-fake-ui-for-media-stream',
-                        '--unsafely-treat-insecure-origin-as-secure=http://licode:3001'
-                    ]
-                },
-                'chromeOptions': {
-                    args: [
-                        '--use-fake-device-for-media-stream',
-                        '--use-fake-ui-for-media-stream',
-                        'unsafely-treat-insecure-origin-as-secure="http://licode:3001"'
-                    ]
-                }
-            }
-        },
-        firefox: {
-            desiredCapabilities: {
-                browserName: 'firefox',
-                'moz:firefoxOptions': {
-                  'prefs': {
-                    'media.navigator.streams.fake': true,
-                  },
-                },
-            }
-        }
+        chrome1: chromeCapabilities,
+        chrome2: chromeCapabilities,
+        firefox1: firefoxCapabilities,
+        firefox2: firefoxCapabilities,
     },
 
     firefoxProfile: {
@@ -204,6 +211,8 @@ exports.config = {
       var chai = require('chai');
       global.expect = chai.expect;
       chai.Should();
+      var initCommands = require('./test/tools/commands.js').initCommands;
+      initCommands();
     },
     /**
      * Runs before a WebdriverIO command gets executed.
@@ -245,8 +254,10 @@ exports.config = {
       if (!test.passed) {
         var featureName = test.fullTitle;
         var fileName = featureName + '.png';
-        chrome.saveScreenshot(chrome.options.screenshotPath + '/chrome_' + fileName);
-        firefox.saveScreenshot(firefox.options.screenshotPath + '/firefox_' + fileName)
+        chrome1.saveScreenshot(chrome1.options.screenshotPath + '/chrome1_' + fileName);
+        chrome2.saveScreenshot(chrome2.options.screenshotPath + '/chrome2_' + fileName);
+        firefox1.saveScreenshot(firefox1.options.screenshotPath + '/firefox1_' + fileName)
+        firefox2.saveScreenshot(firefox2.options.screenshotPath + '/firefox2_' + fileName)
       }
     },
     /**

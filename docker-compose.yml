@@ -8,11 +8,10 @@ services:
 
   chrome:
     image: selenium/node-chrome-debug:3.11.0-dysprosium
-    container_name: chrome
     depends_on:
       - selenium-hub
-    ports:
-      - "5902:5900"  # VNC for debugging things
+    # ports:
+      # - "5902:5900"  # VNC for debugging things
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
@@ -21,11 +20,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-firefox-with-pulseaudio
-    container_name: firefox
     depends_on:
       - selenium-hub
-    ports:
-      - "5901:5900"  # VNC for debugging things
+    # ports:
+      # - "5901:5900"  # VNC for debugging things
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444

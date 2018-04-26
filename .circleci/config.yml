@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Start selenium
           command: |
-            docker-compose up -d selenium-hub chrome firefox
+            docker-compose up -d --scale firefox=2 --scale chrome=2 --scale licode=1 --scale integration=0
 
       - run:
           name: Start licode

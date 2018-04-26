@@ -1,4 +1,4 @@
-FROM circleci/node:4.9
+FROM circleci/node:8
 
 ADD package.json /tmp
 RUN cd /tmp && npm install --only=dev
