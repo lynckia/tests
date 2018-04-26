@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Tests
           command: |
-            docker-compose up -d --exit-code-from integration --scale firefox=2 --scale chrome=2 --scale licode=1 --scale integration=1
+            docker-compose up --exit-code-from integration --scale firefox=2 --scale chrome=2 --scale licode=1 --scale integration=1
 
       - store_test_results:
           path: ./reports
