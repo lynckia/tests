@@ -19,9 +19,19 @@ jobs:
             docker-compose build
 
       - run:
-          name: Tests
+          name: Start selenium
           command: |
-            docker-compose up --exit-code-from integration --scale firefox=2 --scale chrome=2 --scale licode=1 --scale integration=1
+            docker-compose up -d selenium-hub chrome firefox
+
+      - run:
+          name: Start licode
+          command: |
+            docker-compose up -d licode
+
+       - run:
+           name: Tests
+           command: |
+            docker-compose up --exit-code-from integration integration
 
       - store_test_results:
           path: ./reports
