@@ -7,6 +7,10 @@ services:
       driver: "none"
     ports:
       - "4444:4444"  # Only used if we run wdio locally and not via docker
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   chrome:
     image: selenium/node-chrome-debug:3.11.0-dysprosium
@@ -22,6 +26,10 @@ services:
       - HUB_PORT=4444
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   firefox:
     build:
@@ -39,6 +47,10 @@ services:
       - HUB_PORT=4444
       - NODE_MAX_INSTANCES=5
       - NODE_MAX_SESSION=5
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   licode:
     image: lynckia/licode:develop
@@ -50,6 +62,10 @@ services:
       driver: "none"
     volumes:
     - ./licode_default.js:/opt/licode/scripts/licode_default.js
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   integration:
     build:
@@ -67,3 +83,7 @@ services:
     volumes:
     - ./errorShots:/tmp/errorShots
     - ./reports:/tmp/reports
+    deploy:
+      resources:
+        limits:
+          memory: 2G
