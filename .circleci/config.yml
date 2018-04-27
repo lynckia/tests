@@ -28,9 +28,9 @@ jobs:
           command: |
             docker-compose up -d licode
 
-       - run:
-           name: Tests
-           command: |
+      - run:
+          name: Tests
+          command: |
             docker-compose up --exit-code-from integration integration
 
       - store_test_results:
