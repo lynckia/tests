@@ -145,7 +145,13 @@ const tests = new TwoBrowserTest();
 
 new TwoBrowserTest().setBrowsers(['chrome', 'firefox'])
                     .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
-                    .setTypes(['erizo', 'p2p'])
+                    .setTypes(['erizo'])
+                    .setSimulcast([false])
+                    .create();
+
+new TwoBrowserTest().setBrowsers(['chrome', 'firefox'])
+                    .setMedias(['VP8_AND_OPUS'])
+                    .setTypes(['p2p'])
                     .setSimulcast([false])
                     .create();
 
