@@ -32,20 +32,16 @@ function createSuite(browser1, browser2, mediaConfiguration, p2p, simulcast) {
     let client2 = new Client(browser2);
     const publishOptions = simulcast ? {simulcast: {numSpatialLayers: 2}} : {};
 
-    beforeEach(function() {
+    it('should open Basic Example page', function () {
       client1.connect(roomName, mediaConfiguration, p2p);
       client2.connect(roomName, mediaConfiguration, p2p);
-    });
-
-    afterEach(function() {
-    });
-
-    it('should open Basic Example page', function () {
       browser1.getTitle().should.be.equal('Licode Basic Example');
       browser2.getTitle().should.be.equal('Licode Basic Example');
     });
 
     it('should subscribe to each other', function () {
+      client1.connect(roomName, mediaConfiguration, p2p);
+      client2.connect(roomName, mediaConfiguration, p2p);
       const stream1 = client1.createStream({audio: true, video: true, data: false});
       const stream2 = client2.createStream({audio: true, video: true, data: false});
       stream1.initialize();

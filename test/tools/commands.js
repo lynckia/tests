@@ -27,7 +27,7 @@ async function waitUntilRoomConnected() {
 };
 
 async function waitUntilStreamInitialized(stream) {
-  this.waitUntil(async function() {
+  return this.waitUntil(async function() {
     const result = await this.execute(function(id) {
       return window.localStreams[id] !== undefined && window.localStreams[id].stream !== undefined;
     }, stream.id);
@@ -135,7 +135,7 @@ async function subscribeToStream(stream, options) {
 }
 
 async function waitUntilStreamSubscribed(stream) {
-  this.waitUntil(async function() {
+  return this.waitUntil(async function() {
     const result = await this.isSubscribedToStream(stream);
     return result;
   }, 30000, 'timeout waiting to stream being subscribed');
@@ -238,7 +238,7 @@ async function isBlackStream(stream) {
 }
 
 async function waitUntilStreamIsNotBlack(stream) {
-  this.waitUntil(async function() {
+  return this.waitUntil(async function() {
     const result = await this.isBlackStream(stream);
     return !result;
   }, 30000, 'timeout waiting to stream not being black');
