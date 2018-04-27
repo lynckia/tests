@@ -162,7 +162,12 @@ async function isPublishingSimulcast(stream) {
     }
     const stream = window.room.localStreams.get(streamId);
     if (stream && stream.pc) {
-      return stream.pc.peerConnection.localDescription.sdp.indexOf('a=ssrc-group:SIM') !== -1;
+      if (window.room.p2p) {
+        return false;
+      } else {
+        return stream.pc.peerConnection.localDescription.sdp.indexOf('a=ssrc-group:SIM') !== -1 ||
+               stream.pc.peerConnection.localDescription.sdp.indexOf('a=simulcast:') !== -1;
+      }
     }
     return false;
   }, stream.streamId);
@@ -176,8 +181,17 @@ async function containsCodec(stream, codec) {
     }
     const stream = window.room.localStreams.get(streamId);
     if (stream && stream.pc) {
-      return stream.pc.peerConnection.remoteDescription.sdp.indexOf(codec) !== -1 ||
-             stream.pc.peerConnection.remoteDescription.sdp.indexOf(codec.toLowerCase()) !== -1;
+      if (window.room.p2p) {
+        let hasCodec = false;
+        stream.pc.forEach(pc => {
+          hasCodec = pc.peerConnection.remoteDescription.sdp.indexOf(codec) !== -1 ||
+                     pc.peerConnection.remoteDescription.sdp.indexOf(codec.toLowerCase()) !== -1;
+        });
+        return hasCodec;
+      } else {
+        return stream.pc.peerConnection.remoteDescription.sdp.indexOf(codec) !== -1 ||
+              stream.pc.peerConnection.remoteDescription.sdp.indexOf(codec.toLowerCase()) !== -1;
+      }
     }
     return false;
   }, stream.streamId, codec);

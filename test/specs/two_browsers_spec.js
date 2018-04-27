@@ -38,8 +38,6 @@ function createSuite(browser1, browser2, mediaConfiguration, p2p, simulcast) {
     });
 
     afterEach(function() {
-      client1.disconnect();
-      client2.disconnect();
     });
 
     it('should open Basic Example page', function () {
@@ -147,23 +145,12 @@ const tests = new TwoBrowserTest();
 
 new TwoBrowserTest().setBrowsers(['chrome', 'firefox'])
                     .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
-                    .setTypes(['erizo'])
+                    .setTypes(['erizo', 'p2p'])
                     .setSimulcast([false])
                     .create();
 
-// new TwoBrowserTest().setBrowsers(['chrome'/*, 'firefox'*/])
-//                     .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
-//                     .setTypes(['p2p'])
-//                     .setSimulcast([false])
-//                     .create();
-//
-// new TwoBrowserTest().setBrowsers(['firefox'])
-//                     .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
-//                     .setTypes(['p2p'])
-//                     .setSimulcast([false])
-//                     .create();
 
-new TwoBrowserTest().setBrowsers(['chrome'/*, 'firefox'*/])
+new TwoBrowserTest().setBrowsers(['chrome', 'firefox'])
                     .setMedias(['VP8_AND_OPUS'])
                     .setTypes(['erizo'])
                     .setSimulcast([true])
