@@ -21,7 +21,9 @@ class Stream {
   subscribeFrom(client, options = {}) {
     client.browser.subscribeToStream(this, options);
     client.browser.waitUntilStreamSubscribed(this);
-    client.browser.waitUntilStreamIsNotBlack(this);
+    if (this.config.video) {
+      client.browser.waitUntilStreamIsNotBlack(this);
+    }
   }
 
   isPublishingSimulcast() {
