@@ -198,7 +198,7 @@ async function containsCodec(stream, codec) {
   return result.value;
 }
 
-async function isBlackStream(stream) {
+async function isRenderingVideo(stream) {
   const result = await this.execute(function(streamId) {
     if (!window.room) {
       return false;
@@ -225,10 +225,10 @@ async function isBlackStream(stream) {
       const image = stream.getVideoFrame();
       for (const i = 0; i < 10; i++) {
         if (!_sampleIsBlack(image.data, _getRandomSample(image.width, image.height))) {
-          return false;
+          return true;
         }
       }
-      return true;
+      return false;
     }
 
 
@@ -239,7 +239,7 @@ async function isBlackStream(stream) {
 
 async function waitUntilStreamIsNotBlack(stream) {
   return this.waitUntil(async function() {
-    const result = await this.isBlackStream(stream);
+    const result = await this.isRenderingVideo(stream);
     return !result;
   }, 30000, 'timeout waiting to stream not being black');
 }
@@ -258,7 +258,7 @@ function initCommandsInBrowser(browser) {
   browser.addCommand('isSubscribedToStream', isSubscribedToStream);
   browser.addCommand('isPublishingSimulcast', isPublishingSimulcast);
   browser.addCommand('containsCodec', containsCodec);
-  browser.addCommand('isBlackStream', isBlackStream);
+  browser.addCommand('isRenderingVideo', isRenderingVideo);
   browser.addCommand('waitUntilStreamIsNotBlack', waitUntilStreamIsNotBlack);
 }
 
