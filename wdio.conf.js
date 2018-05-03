@@ -233,6 +233,7 @@ exports.config = {
      * @param {Object} test test details
      */
     beforeTest: function (test) {
+      browser.reload();
       var featureName = test.fullTitle;
       console.log('Running test:' + featureName);
     },

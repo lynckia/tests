@@ -202,7 +202,16 @@ class TwoBrowserTest {
 const tests = new TwoBrowserTest();
 
 new TwoBrowserTest().setBrowsers(['chrome', 'firefox'])
-                    .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS', 'H264_AND_OPUS'])
+                    .setMedias(['VP8_AND_OPUS', 'VP9_AND_OPUS'])
+                    .setTypes(['erizo'])
+                    .setSimulcast([false])
+                    .create();
+
+
+// PATCH: we don't test H264 in Firefox because it downloads and isntalls the OpenH264 plugin on demand
+// resulting on flaky tests because it sometimes does not install on time and it sometimes crashes FF
+new TwoBrowserTest().setBrowsers(['chrome'])
+                    .setMedias(['H264_AND_OPUS'])
                     .setTypes(['erizo'])
                     .setSimulcast([false])
                     .create();
