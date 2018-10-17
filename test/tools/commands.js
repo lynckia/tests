@@ -24,7 +24,7 @@ async function connectToAnotherRoom(roomName, mediaConfiguration, p2p) {
 }
 
 async function waitUntilAnotherRoomsConnected() {
-  return this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     let result = await this.execute(function() {
       window.rooms = window.rooms || [];
       let connected = true;
@@ -40,7 +40,7 @@ async function waitUntilAnotherRoomsConnected() {
 };
 
 async function waitUntilRoomConnected() {
-  return this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     let result = await this.execute(function() {
       window.room = window.room;
       if (!window.room && typeof room !== 'undefined') {
@@ -56,7 +56,7 @@ async function waitUntilRoomConnected() {
 };
 
 async function waitUntilStreamInitialized(stream) {
-  return this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.execute(function(id) {
       return window.localStreams[id] !== undefined && window.localStreams[id].stream !== undefined;
     }, stream.id);
@@ -67,7 +67,7 @@ async function waitUntilStreamInitialized(stream) {
 async function waitUntilStreamsInitialized(streams) {
   const session = await this.session();
   const myStreams = streams.filter(stream => stream.sessionId === session.sessionId);
-  return this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.execute(function(ids) {
       let allInitialized = true;
       ids.forEach(id => {
@@ -241,7 +241,7 @@ async function publishStreams(streams, options) {
 }
 
 async function waitUntilStreamPublished(stream) {
-  this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.execute(function(id) {
       if (!window.room) {
         return [false, 0];
@@ -379,14 +379,14 @@ async function subscribeToStreams(streams, options) {
 }
 
 async function waitUntilStreamSubscribed(stream) {
-  this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.isSubscribedToStream(stream);
     return result;
   }, 30000, 'timeout waiting to stream being subscribed');
 }
 
 async function waitUntilStreamsSubscribed(streams) {
-  this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.isSubscribedToStreams(streams);
     return result;
   }, 30000, 'timeout waiting to stream being subscribed');
@@ -583,14 +583,14 @@ async function isRenderingVideos(streams) {
 }
 
 async function waitUntilStreamIsNotBlack(stream) {
-  return this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.isRenderingVideo(stream);
     return result;
   }, 30000, 'timeout waiting to stream not being black');
 }
 
 async function waitUntilStreamsAreNotBlack(streams) {
-  return this.waitUntil(async function() {
+  await this.waitUntil(async function() {
     const result = await this.isRenderingVideos(streams);
     return result;
   }, 30000, 'timeout waiting to streams not being black');

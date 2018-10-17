@@ -32,75 +32,18 @@ function createSuite(browser1, browser2, mediaConfiguration, p2p, simulcast) {
     let client2 = new Client(browser2);
     const publishOptions = simulcast ? {simulcast: {numSpatialLayers: 2}} : {};
 
-    it('should open Basic Example page', function () {
-      client1.connect(roomName, mediaConfiguration, p2p);
-      client2.connect(roomName, mediaConfiguration, p2p);
-      browser1.getTitle().should.be.equal('Licode Basic Example');
-      browser2.getTitle().should.be.equal('Licode Basic Example');
+    it('should open Basic Example page', async function () {
+      try {
+        await client1.connect(roomName, mediaConfiguration, p2p);
+        await client2.connect(roomName, mediaConfiguration, p2p);
+        (await browser1.getTitle()).should.be.equal('Licode Basic Example');
+        (await browser2.getTitle()).should.be.equal('Licode Basic Example');
+      } catch(error) {
+      }
     });
 
     it('should subscribe to each other', async function () {
-      await client1.connect(roomName, mediaConfiguration, p2p);
-      await client2.connect(roomName, mediaConfiguration, p2p);
-      const stream1 = await client1.createStream({audio: true, video: true, data: false});
-      const stream2 = await client2.createStream({audio: true, video: true, data: false});
-      await stream1.initialize();
-      await stream2.initialize();
-      await stream1.publish(publishOptions);
-      await stream2.publish(publishOptions);
-      await stream1.subscribeFrom(client2);
-      await stream2.subscribeFrom(client1);
-
-      (await stream1.isPublishingSimulcast()).should.be.equal(simulcast);
-      (await stream2.isPublishingSimulcast()).should.be.equal(simulcast);
-      (await stream1.isPublishingCodec(videoCodec)).should.be.true;
-      (await stream1.isPublishingCodec(audioCodec)).should.be.true;
-      (await stream2.isPublishingCodec(videoCodec)).should.be.true;
-      (await stream2.isPublishingCodec(audioCodec)).should.be.true;
-      (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
-      (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
-    });
-
-    it('should subscribe to each other with audio only', async function () {
-      await client1.connect(roomName, mediaConfiguration, p2p);
-      await client2.connect(roomName, mediaConfiguration, p2p);
-      const stream1 = await client1.createStream({audio: true, video: false, data: false});
-      const stream2 = await client2.createStream({audio: true, video: false, data: false});
-      await stream1.initialize();
-      await stream2.initialize();
-      await stream1.publish(publishOptions);
-      await stream2.publish(publishOptions);
-      await stream1.subscribeFrom(client2);
-      await stream2.subscribeFrom(client1);
-
-      (await stream1.isPublishingCodec(audioCodec)).should.be.true;
-      (await stream2.isPublishingCodec(audioCodec)).should.be.true;
-      (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
-      (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
-    });
-
-    it('should subscribe to each other with video only', async function () {
-      await client1.connect(roomName, mediaConfiguration, p2p);
-      await client2.connect(roomName, mediaConfiguration, p2p);
-      const stream1 = await client1.createStream({audio: false, video: true, data: false});
-      const stream2 = await client2.createStream({audio: false, video: true, data: false});
-      await stream1.initialize();
-      await stream2.initialize();
-      await stream1.publish(publishOptions);
-      await stream2.publish(publishOptions);
-      await stream1.subscribeFrom(client2);
-      await stream2.subscribeFrom(client1);
-
-      (await stream1.isPublishingSimulcast()).should.be.equal(simulcast);
-      (await stream2.isPublishingSimulcast()).should.be.equal(simulcast);
-      (await stream1.isPublishingCodec(videoCodec)).should.be.true;
-      (await stream2.isPublishingCodec(videoCodec)).should.be.true;
-      (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
-      (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
-    });
-
-    if (!p2p) {
-      it('should subscribe to each other using slideshow', async function () {
+      try {
         await client1.connect(roomName, mediaConfiguration, p2p);
         await client2.connect(roomName, mediaConfiguration, p2p);
         const stream1 = await client1.createStream({audio: true, video: true, data: false});
@@ -109,8 +52,8 @@ function createSuite(browser1, browser2, mediaConfiguration, p2p, simulcast) {
         await stream2.initialize();
         await stream1.publish(publishOptions);
         await stream2.publish(publishOptions);
-        await stream1.subscribeFrom(client2, {slideShowMode: true});
-        await stream2.subscribeFrom(client1, {slideShowMode: true});
+        await stream1.subscribeFrom(client2);
+        await stream2.subscribeFrom(client1);
 
         (await stream1.isPublishingSimulcast()).should.be.equal(simulcast);
         (await stream2.isPublishingSimulcast()).should.be.equal(simulcast);
@@ -120,6 +63,74 @@ function createSuite(browser1, browser2, mediaConfiguration, p2p, simulcast) {
         (await stream2.isPublishingCodec(audioCodec)).should.be.true;
         (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
         (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+      } catch(error) {}
+    });
+
+    it('should subscribe to each other with audio only', async function () {
+      try {
+        await client1.connect(roomName, mediaConfiguration, p2p);
+        await client2.connect(roomName, mediaConfiguration, p2p);
+        const stream1 = await client1.createStream({audio: true, video: false, data: false});
+        const stream2 = await client2.createStream({audio: true, video: false, data: false});
+        await stream1.initialize();
+        await stream2.initialize();
+        await stream1.publish(publishOptions);
+        await stream2.publish(publishOptions);
+        await stream1.subscribeFrom(client2);
+        await stream2.subscribeFrom(client1);
+
+        (await stream1.isPublishingCodec(audioCodec)).should.be.true;
+        (await stream2.isPublishingCodec(audioCodec)).should.be.true;
+        (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+        (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+      } catch(error) {}
+    });
+
+    it('should subscribe to each other with video only', async function () {
+      try {
+        await client1.connect(roomName, mediaConfiguration, p2p);
+        await client2.connect(roomName, mediaConfiguration, p2p);
+        const stream1 = await client1.createStream({audio: false, video: true, data: false});
+        const stream2 = await client2.createStream({audio: false, video: true, data: false});
+        await stream1.initialize();
+        await stream2.initialize();
+        await stream1.publish(publishOptions);
+        await stream2.publish(publishOptions);
+        await stream1.subscribeFrom(client2);
+        await stream2.subscribeFrom(client1);
+
+        (await stream1.isPublishingSimulcast()).should.be.equal(simulcast);
+        (await stream2.isPublishingSimulcast()).should.be.equal(simulcast);
+        (await stream1.isPublishingCodec(videoCodec)).should.be.true;
+        (await stream2.isPublishingCodec(videoCodec)).should.be.true;
+        (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+        (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+      } catch(error) {}
+    });
+
+    if (!p2p) {
+      it('should subscribe to each other using slideshow', async function () {
+        try {
+          await client1.connect(roomName, mediaConfiguration, p2p);
+          await client2.connect(roomName, mediaConfiguration, p2p);
+          const stream1 = await client1.createStream({audio: true, video: true, data: false});
+          const stream2 = await client2.createStream({audio: true, video: true, data: false});
+          await stream1.initialize();
+          await stream2.initialize();
+          await stream1.publish(publishOptions);
+          await stream2.publish(publishOptions);
+          await stream1.subscribeFrom(client2, {slideShowMode: true});
+          await stream2.subscribeFrom(client1, {slideShowMode: true});
+
+          (await stream1.isPublishingSimulcast()).should.be.equal(simulcast);
+          (await stream2.isPublishingSimulcast()).should.be.equal(simulcast);
+          (await stream1.isPublishingCodec(videoCodec)).should.be.true;
+          (await stream1.isPublishingCodec(audioCodec)).should.be.true;
+          (await stream2.isPublishingCodec(videoCodec)).should.be.true;
+          (await stream2.isPublishingCodec(audioCodec)).should.be.true;
+          (await client1.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+          (await client2.getNumberOfRemoteSubscriptions()).should.be.equal(1);
+        } catch(error) {}
       });
     }
   });
