@@ -80,7 +80,7 @@ exports.config = {
     firefoxProfile: {
       extensions: [],
       'media.navigator.streams.fake': true,
-  },
+    },
 
     //
     // ===================
@@ -212,7 +212,7 @@ exports.config = {
       global.expect = chai.expect;
       chai.Should();
       var initCommands = require('./test/tools/commands.js').initCommands;
-      initCommands();
+      [chrome1, chrome2, firefox1, firefox2].forEach(browser => initCommands(browser));
     },
     /**
      * Runs before a WebdriverIO command gets executed.

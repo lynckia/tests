@@ -1,37 +1,40 @@
 let globalStreamId = 0;
+
 class Stream {
-  constructor(client, config) {
+  constructor(client, sessionId, config) {
     this.client = client;
     this.config = config;
     this.browser = client.browser;
+    this.sessionId = sessionId;
     this.id = globalStreamId++;
-    this.browser.createStream(this);
+    this.streamIds = [];
   }
 
-  initialize() {
-    this.browser.initializeStream(this);
-    this.browser.waitUntilStreamInitialized(this);
+  async initialize() {
+    await this.browser.createStream(this, this.config);
+    await this.browser.initializeStream(this);
+    await this.browser.waitUntilStreamInitialized(this);
   }
 
-  publish(options = {}) {
-    this.browser.publishStream(this, options);
-    this.browser.waitUntilStreamPublished(this);
+  async publish(options = {}) {
+    await this.browser.publishStream(this, options);
+    await this.browser.waitUntilStreamPublished(this);
   }
 
-  subscribeFrom(client, options = {}) {
-    client.browser.subscribeToStream(this, options);
-    client.browser.waitUntilStreamSubscribed(this);
+  async subscribeFrom(client, options = {}) {
+    await client.browser.subscribeToStream(this, options);
+    await client.browser.waitUntilStreamSubscribed(this);
     if (this.config.video) {
-      client.browser.waitUntilStreamIsNotBlack(this);
+      await client.browser.waitUntilStreamIsNotBlack(this);
     }
   }
 
-  isPublishingSimulcast() {
-    return this.browser.isPublishingSimulcast(this);
+  async isPublishingSimulcast() {
+    return await this.browser.isPublishingSimulcast(this);
   }
 
-  isPublishingCodec(codec) {
-    return this.browser.containsCodec(this, codec);
+  async isPublishingCodec(codec) {
+    return await this.browser.containsCodec(this, codec);
   }
 }
 
