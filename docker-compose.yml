@@ -1,7 +1,7 @@
 version: "3"
 services:
   selenium-hub:
-    image: selenium/hub:3.14
+    image: selenium/hub:3.14159
     container_name: selenium-hub
     logging:
       driver: "none"
@@ -13,7 +13,7 @@ services:
           memory: 2G
 
   chrome:
-    image: selenium/node-chrome-debug:3.14
+    image: selenium/node-chrome-debug:3.14159
     container_name: chrome
     depends_on:
       - selenium-hub
