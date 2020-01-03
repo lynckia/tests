@@ -1,4 +1,4 @@
-FROM selenium/node-firefox-debug:3.14159
+FROM selenium/node-firefox-debug:3.141.59
 
 USER root
 RUN apt-get update && apt-get install -y pulseaudio
